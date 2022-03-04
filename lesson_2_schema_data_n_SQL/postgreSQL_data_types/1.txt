@@ -1,0 +1,6 @@
+Describe the difference between the varchar and text data types.
+
+Both varchar and text are string data types.
+varchar requires a type modifier to specify the maximum length of string entries it will take
+text does not require this.
+text however, is a datatype that is exclusive to PostgreSQL, and won't work over other RDBMS.

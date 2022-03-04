@@ -1,0 +1,7 @@
+Can a time with a time zone be stored in a column of type timestamp?
+
+Yes it can be.
+
+
+->-> It turns out that `timestamp` and `timestamp with time zone` are two different data types.
+---> 

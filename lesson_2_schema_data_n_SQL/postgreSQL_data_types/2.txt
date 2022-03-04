@@ -1,0 +1,14 @@
+Describe the difference between the integer, decimal, and real data types.
+
+
+All are Numerical data types.
+
+- integer is whole numbers
+
+- decimal is for arbitary precision numbers, which is to say, they are non-floating-point fractional numbers. 
+  Decimal takes two type modifiers, one that specifies the precision of the number (how many
+  digits it must be made up of) and the other which specifies the scale of the number (how many 
+  digits can appear to the right of the decimal point).
+
+
+- real is for floating point numbers. These are faster than arbitrary precision numbers, but less accurate.
