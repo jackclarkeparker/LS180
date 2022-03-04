@@ -1,0 +1,21 @@
+DDL, or Data Definition Language is a sublanguage of SQL that is used to establish the structure of our database, it's tables, and the columns that make up those tables. These topics all fall under the category of schema.
+This is different from working with data; rather it provides the housing that data will be placed into.
+DML provides CRUD operations for working with the schema of databases.
+
+Some example statements of DDL are:
+
+CREATE
+DROP
+ALTER
+
+
+DML or Data Manipulation Language is a sublanguage of SQL that is used to work with data itself.
+It provides CRUD operations for working directly with data.
+
+Some example statements of DML are:
+
+SELECT
+INSERT
+UPDATE
+DELETE
+
