@@ -1,0 +1,10 @@
+1. What does the file do?
+2. What is the output of the command? What does each line in this output mean?
+3. Open up the file and look at its contents. What does the first line do?
+
+
+1. -> The file creates a table called `films`, and populates it with three records.
+2. -> It first attempts to drop a table, then creates it again, then inserts three records.
+3. -> The first line deletes a table called `films` if it already exists.
+      (I guess the `public` prefix has something to do with `films` being a publically
+       available table)

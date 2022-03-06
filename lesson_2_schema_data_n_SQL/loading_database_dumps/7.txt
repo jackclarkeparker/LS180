@@ -1,0 +1,6 @@
+SELECT title, date_part('year', NOW()) - year AS age
+  FROM films
+  ORDER BY age;
+
+
+Need to put year into double quotes - some RDBMSes will use it as a keyword
