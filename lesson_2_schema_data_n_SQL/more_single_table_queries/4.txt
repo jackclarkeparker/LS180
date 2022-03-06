@@ -1,0 +1,17 @@
+SELECT trim(substring(email from '@.*$'), '@') AS domain,
+       count(substring(email from '@.*$'))
+          FROM people
+          GROUP BY domain
+          ORDER BY count DESC;
+
+
+THEY used the other variety of substring, which takes an index from which to select from:
+    substr(string [from int], [for int])
+(this variety has the alias `substr` available to it)
+
+They then used the `strpos()` function to find the index in `email` where '@' occurred,
+and added 1 to this so as to exclude it.
+
+ALSO the count function doesn't need to count those domains, it can just count something like `id`, which will always be present anyway...
+
+Otherwise fairly similar.
