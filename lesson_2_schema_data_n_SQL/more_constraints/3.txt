@@ -1,0 +1,4 @@
+How does modifying a column to be NOT NULL affect how it is displayed by \d films?
+
+
+A column that has been modified to be NOT NULL, will display this under the `modifiers` column of the table schema.

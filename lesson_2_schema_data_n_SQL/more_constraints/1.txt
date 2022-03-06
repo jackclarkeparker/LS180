@@ -1,0 +1,6 @@
+Import this file into a PostgreSQL database.
+
+
+wget https://raw.githubusercontent.com/launchschool/sql_course_data/master/sql-and-relational-databases/schema-data-and-sql/more-constraints/films2.sql
+
+psql -d sql-course < films2.sql
