@@ -1,0 +1,6 @@
+What PostgreSQL program can be used to create a SQL file that contains the SQL commands needed to recreate the current structure and data of the weather table?
+
+
+$ pg_dump
+
+$ pg_dump -d lesson_2 -t weather --inserts > dump.sql

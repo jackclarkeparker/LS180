@@ -1,0 +1,6 @@
+Write a SQL statement to determine the average (mean) temperature -- divide the sum of the high and low temperatures by two) for each day from March 2, 2016 through March 8, 2016. Make sure to round each average value to one decimal place.
+
+
+SELECT date, round((low + high) / 2.0, 1) AS mean_temp
+  FROM temperatures
+  WHERE date BETWEEN '2 Mar 2016' AND '8 Mar 2016';
