@@ -1,0 +1,14 @@
+What will the name of the sequence created by the following SQL statement be?
+
+CREATE TABLE regions (id serial PRIMARY KEY, name text, area integer);
+
+
+
+id_regions_seq
+
+
+
+>>>
+regions_id_seq
+
+So it's $table_$column_seq
