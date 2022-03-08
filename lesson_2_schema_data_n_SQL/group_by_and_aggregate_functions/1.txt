@@ -1,0 +1,5 @@
+Import this file into a database.
+
+$ wget $url
+
+$ psql -d sql-course < films4.sql

@@ -1,0 +1,5 @@
+Write a SQL query that returns the same results as the answer for #3, but without using DISTINCT.
+
+Hehe, I used GROUP BY before. I'll use DISTINCT this time.
+
+SELECT DISTINCT genre FROM films;

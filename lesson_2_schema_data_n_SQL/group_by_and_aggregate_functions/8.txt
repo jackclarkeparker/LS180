@@ -1,0 +1,9 @@
+Write a SQL query that finds all films whose director has the first name John.
+
+
+SELECT * FROM films WHERE director LIKE 'John%';
+
+My solution here would also select films from people whose first name began with John, like Johnson, or Johnny.
+
+LS solution was the same as mine, but with whitespace specified after the name:
+"John %"
