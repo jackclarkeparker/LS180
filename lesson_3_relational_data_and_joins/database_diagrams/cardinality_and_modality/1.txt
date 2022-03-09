@@ -1,0 +1,3 @@
+What is cardinality?
+
+The cardinality of a relationship refers to the number of objects involved - Is the relationship a one-to-one, one-to-many, or many-to-many? (1:1, 1:M, M:M)

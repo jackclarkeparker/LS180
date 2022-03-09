@@ -1,0 +1,3 @@
+What is modality?
+
+Modality refers to whether the relationship is required or optional.
