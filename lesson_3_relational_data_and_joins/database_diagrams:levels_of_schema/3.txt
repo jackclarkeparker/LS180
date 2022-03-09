@@ -1,0 +1,6 @@
+What is a physical schema?
+
+A physical schema is a low-level database-specific implementation of a conceptual schema.
+It won't describe abstract entities, but instead outline the relations that are the manifestation of those entities.
+Included in a physical schema will be the names of all tables and their attributes, as well as the datatypes of attributes, and the rules for how they will relate to one another.
+Often we'll specify the constraints applied to various attributes here as well.

@@ -1,0 +1,5 @@
+What are the three types of relationships that can be shown in a database diagram?
+
+-> A one-to-one relationship
+-> A one-to-many relationship
+-> A many-to-many relationship

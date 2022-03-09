@@ -1,0 +1,4 @@
+What is a conceptual schema?
+
+A conceptual schema is a high level design focused on identifying entities and relationships.
+It's abstract, and is not in any way concerned with how actual data / objects will be stored in the database.
