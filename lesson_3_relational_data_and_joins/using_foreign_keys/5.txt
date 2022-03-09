@@ -1,0 +1,43 @@
+Can you insert a row into orders without a product_id? Write a SQL statement to prove your answer.
+
+
+
+
+No, I cannot. This is because the FOREIGN KEY Constraint requires that values inserted in it's column
+already exist in the Primary Key column of the referenced table.
+
+That we cannot insert values that don't already exist in the referenced primary key column is what preserves the referential integrity of the data in a database.
+
+I'll use this statement to prove it:
+INSERT INTO orders (product_id, quantity)
+  VALUES (3, 100);
+
+
+WOAH.
+I didn't read the question properly! I thought it read "Can I insert a row into orders with a 
+product_id that doesn't exist in products".
+
+I really gotta read questions 20% slower.
+
+
+
+Trying again now.
+
+I guess FOREIGN KEYS don't have the NOT NULL constraints of PRIMARY KEYS.
+We'll often choose to set them to be NOT NULL, from the perspective of ensuring that all
+rows present in the table will associate with some data in the referenced table.
+However, this is an optional inclusion.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

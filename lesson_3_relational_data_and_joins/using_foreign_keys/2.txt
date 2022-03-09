@@ -1,0 +1,7 @@
+Update the orders table so that referential integrity will be preserved for the data between orders and products.
+
+
+ALTER TABLE orders ADD FOREIGN KEY (product_id) REFERENCES products(id);
+
+I couldn't figure out for the longest time why my code wasn't working.
+I was writing the final clause like so: REFERENCES products.id;

@@ -1,0 +1,12 @@
+Write a SQL statement that will prevent NULL values from being stored in orders.product_id. What happens if you execute that statement?
+
+
+
+ALTER TABLE orders ALTER COLUMN product_id SET NOT NULL;
+
+If we try to execute this statement above ^^, an error will be raised.
+In the previous problem we inserted a row into orders that contained a NULL value
+for the product_id column, which would violate a NOT NULL constraint were it in place.
+We can't place a constraint on a column that contains values that violate that constraint.
+We must first remove these rows, or update their values such that they won't violate the constraint.
+We can then put the NOT NULL constraint in place afterwards.

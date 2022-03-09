@@ -1,0 +1,9 @@
+True or false: A foreign key constraint prevents NULL values from being stored in a column.
+
+
+
+false
+
+We'll often choose to give a foreign key column a NOT NULL constraint such that all rows
+entered in the table will associate with a row in the referenced table. However, this is
+not enforced by way of the foreign key constraint alone, like is the case with Primary Keys.

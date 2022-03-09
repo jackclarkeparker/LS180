@@ -1,0 +1,12 @@
+Write a SQL statement that returns a result like this:
+
+
+
+SELECT orders.quantity, products.name
+  FROM orders
+  INNER JOIN products
+    ON orders.product_id = products.id;
+
+
+LS didn't prefix their column names with table names - a small data set, unique column names anyway.
+Sure, table names weren't necessary here.

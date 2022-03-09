@@ -1,0 +1,4 @@
+Import this file into a new database.
+
+$ wget $url
+$ psql -d using_foreign_keys < dump.sql
