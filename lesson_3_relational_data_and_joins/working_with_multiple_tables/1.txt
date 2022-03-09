@@ -1,0 +1,5 @@
+Import this file into an empty PostgreSQL database. Note: the file contains a lot of data and may take a while to run; your terminal should return to the command prompt once the import is complete.
+
+$ wget $url
+
+$ psql -d multiple_tables_db < $dump.sql

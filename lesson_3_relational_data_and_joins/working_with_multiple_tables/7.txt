@@ -1,0 +1,17 @@
+Write a query to print out a report of all tickets purchased by the customer with the email address 'gennaro.rath@mcdermott.co'. The report should include the event name and starts_at and the seat's section name, row, and seat number.
+
+SELECT events.name AS event, events.starts_at, sections.name, seats.row, seats.number AS seat
+  FROM customers
+  INNER JOIN tickets
+    ON customers.id = tickets.customer_id
+  INNER JOIN events
+    ON events.id = tickets.event_id
+  INNER JOIN seats
+    ON seats.id = tickets.seat_id
+  INNER JOIN sections
+    ON sections.id = seats.section_id
+  WHERE customers.email = 'gennaro.rath@mcdermott.co';
+
+
+
+Woops, I didn't catch section.name -> needed a column alias

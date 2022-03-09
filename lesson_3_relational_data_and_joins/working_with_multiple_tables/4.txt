@@ -1,0 +1,18 @@
+Write a query that determines what percentage of the customers in the database have purchased a ticket to one or more of the events.
+
+SELECT round(count(DISTINCT t.customer_id) * 100.0 / count(DISTINCT c.id), 2) AS percent
+    FROM customers AS c
+    FULL JOIN tickets AS t
+    ON c.id = t.customer_id;                                                                
+
+
+Okay, this was hacked together.
+- I didn't consider which kind of JOIN was necessary.
+- I didn't tidy it up too much
+  - That's because I was anticipating that LS would provide a totally different solution.
+    But they basically used my solution!
+
+THINGS LS DID DIFFERNETLY:
+- They cast to a decimal using `::decimal` notation. (TOGGLE THIS)
+- They performed both count operations first, and then did the multiplcation by 100 afterwards.
+- They used only a LEFT OUTER JOIN.

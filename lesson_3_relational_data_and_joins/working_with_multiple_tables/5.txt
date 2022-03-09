@@ -1,0 +1,20 @@
+Write a query that returns the name of each event and how many tickets were sold for it, in order from most popular to least popular.
+
+
+
+SELECT events.name, COUNT(tickets.id) AS popularity
+  FROM events
+  INNER JOIN tickets
+    ON events.id = tickets.event_id
+  GROUP BY events.name
+  ORDER BY popularity DESC;
+
+
+
+LS solution used LEFT OUTER JOIN instead of INNER JOIN.
+  -> The logic here is that an event that doesn't have any tickets sold yet will still be included in
+     the query. Makes good sense.
+
+  - Ask yourself. What would I be excluding with an INNER JOIN here. What would I include by using
+    each form of OUTER JOIN?
+
