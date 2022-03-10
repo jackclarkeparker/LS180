@@ -1,0 +1,24 @@
+Increase Star Name Length
+
+
+
+ALTER TABLE stars ALTER COLUMN name TYPE varchar(50);
+
+
+
+Further Exploration
+
+Assume the stars table already contains one or more rows of data. What will happen when you try to run the above command? To test this, revert the modification and add a row or two of data:
+
+
+ALTER TABLE stars
+ALTER COLUMN name TYPE varchar(25);
+
+INSERT INTO stars (name, distance, spectral_type, companions)
+           VALUES ('Alpha Centauri B', 4, 'K', 3);
+
+ALTER TABLE stars
+ALTER COLUMN name TYPE varchar(50);
+
+
+There won't be any errors raised, as the entries are not in violation of the datatype modification.

@@ -1,0 +1,35 @@
+Add a Moons Table
+
+
+
+CREATE TABLE moons(
+  id serial PRIMARY KEY,
+  designation serial UNIQUE
+  semi_major_axis_km numeric CHECK (
+    semi_major_axis_km > 0 OR semi_major_axis_km IS NULL
+  ),
+  mass numeric CHECK (mass > 0 OR mass IS NULL),
+  planet_id integer REFERENCES planets(id)
+);
+
+
+THINGS MISSED:
+- My designation column allows for negative values (LS provided a CHECK against this)
+- It's not necessary to specify in the check an allowance for NULL values
+  -> NULL values will already get past the `column > 0` check
+- My planet_id is a foreign key, it should probably have a NOT NULL constraint (LS did this)
+
+ADDITIONALLY
+- LS decided for the designation to be an integer, not serial.
+  - I suppose I thought that we wanted to designate moons in the order they were discovered,
+    and so the order they were entered would be the order they were discovered, so serial
+    would be correct.
+    - I suppose really though, using serial indicates that we're looking for an IDENTIFIER type
+      of value. In this case, we use it because incidentally, it looks as though each of the
+      values for this column will increment by one.
+      The intentionality here is confusing. We're not ascribing a new identifier to each moon
+      in the database - we're just recording what designation it has, as defined by the wider
+      community.
+
+
+

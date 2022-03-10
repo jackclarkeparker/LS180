@@ -1,0 +1,37 @@
+Stellar Distance Precision
+
+For many of the closest stars, we know the distance from Earth fairly accurately; for instance, Proxima Centauri is roughly 4.3 light years away. Our database, as currently defined, only allows integer distances, so the most accurate value we can enter is 4. Modify the distance column in the stars table so that it allows fractional light years to any degree of precision required.
+
+
+
+I guess if we want to allow fractional values of any degree of precision, we probably want to allow 
+for numbers to be entered with any number of decimal digits. I wonder if that indicates we should use 
+the `real` data type, for floating point numbers. Or if we should use decimal with arbitrary 
+precision numbers, and provide the greatest scale type modifier possible.
+
+I've read the docs. It looks like floating-point numbers are good for speed of calculations, but are
+less precise than arbitrary precision numbers, which can also take way way way more decimal digits.
+If you define the data-type of a column as just numeric (/ decimal) without indicating scale or
+precision, the max for both is allowed for, but numbers that don't specify extra digits won't be tagged on with extras.
+
+ALTER TABLE stars ALTER COLUMN distance_ly TYPE numeric;
+
+
+
+Further Exploration
+Assume the stars table already contains one or more rows of data. What will happen when you try to run the above command? To test this, revert the modification and add a row or two of data:
+
+
+
+
+Again, I would presume that no errors would be thrown, because the type change is from one numeric
+type to another, and an integer can become a numeric number without issue.
+
+
+
+
+
+
+
+
+

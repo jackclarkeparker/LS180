@@ -1,0 +1,15 @@
+Enumerated Types
+
+
+
+ALTER TABLE stars DROP CONSTRAINT stars_spectral_type_check;
+
+CREATE TYPE valid_spectral_types AS ENUM ('O', 'B', 'A', 'F', 'G', 'K', 'M');
+
+ALTER TABLE stars
+  ALTER COLUMN spectral_type TYPE valid_spectral_types
+    USING spectral_type::valid_spectral_types;
+
+
+
+LS called their type spectral_type_enum

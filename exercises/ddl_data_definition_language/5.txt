@@ -1,0 +1,50 @@
+Check Values in List
+
+
+
+ALTER TABLE stars
+  ADD CONSTRAINT validate_spectral_type             # Maybe better to call it spectral_type_check
+    CHECK(strpos('OBAFGKM', spectral_type) <> 0),
+  ALTER COLUMN spectral_type SET NOT NULL;
+
+
+LS solution is much more explicit. Mine will achieve the same result, but does so
+in a way that reads with much more ambiguity.
+
+They use an array comparison, which is what I was originally trying to do by looking into
+Array functions. It turns out that PostgreSQL provides an extension that uses subquery like syntax
+to compare values with 'arrays'.
+
+
+
+Further Exploration
+
+Assume the stars table contains one or more rows that are missing a spectral_type value, or that have an illegal value. What will happen when you try to alter the table schema? How would you go about adjusting the data to work around this problem. To test this, revert the modification and add some data:
+
+
+
+If we want to make an alteration to a column's datatype that contains values that would violate
+that data type, an error will be thrown.
+
+In this instance, if we attempt to set the spectral_type column to NOT NULL, but it already includes
+NULL values, then as indicated, an error will be thrown and the change will not be made.
+
+A work around would be to include a new valid value of 'u' (for unspecified) in our spectral_type check, then update all NULL values in the table for this column to 'u', then to set NOT NULL after this.
+
+
+Somebody suggested using '?', which is a good option, better than 'u' probably.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
