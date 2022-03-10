@@ -1,0 +1,5 @@
+Why does "when" need to be quoted in many of the queries in this lesson?
+
+
+
+Because when is a keyword in the SQL standard

@@ -1,0 +1,10 @@
+Add a constraint to contacts that prevents a duplicate value being added in the column number.
+
+
+
+ALTER TABLE contacts ALTER COLUMN number SET NOT NULL;
+
+
+WOOPS, again, misread the question.
+
+ALTER TABLE contacts ADD CONSTRAINT number_unique UNIQUE (number);

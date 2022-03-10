@@ -1,0 +1,9 @@
+Write a SQL statement that attempts to insert a duplicate number for a new contact but fails. What error is shown?
+
+
+
+INSERT INTO contacts (first_name, last_name, number)
+  VALUES ('bla', 'bla', 6125594874);
+
+ERROR:  duplicate key value violates unique constraint "number_unique"     <<< This error is shown
+DETAIL:  Key (number)=(6125594874) already exists.

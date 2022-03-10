@@ -1,0 +1,8 @@
+Draw an entity-relationship diagram for the data we've been working with in this assignment.
+
+
+________________              _________________
+|              |\             |               |
+|     Calls    |->-O------|-|-|   Contacts    |
+|              |/             |               |
++--------------+              +---------------+
