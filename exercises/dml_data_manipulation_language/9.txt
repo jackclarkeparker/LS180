@@ -1,0 +1,76 @@
+UPDATE device_id
+
+We've realized that the last two parts we're using for device number 2, "Gyroscope", actually belong 
+to an "Accelerometer". Write an SQL statement that will associate the last two parts from our parts 
+table with an "Accelerometer" instead of a "Gyroscope".
+
+
+
+I'm not entirely sure what is inferred by "last two parts"
+Let's assume a correlation between the magnitude of the number and it's position in a
+first->last list.
+
+     name      | part_number 
+---------------+-------------
+ Accelerometer |           1
+ Accelerometer |           2
+ Accelerometer |           3
+ Gyroscope     |           4
+ Gyroscope     |           5
+ Gyroscope     |           6
+ Gyroscope     |           7
+ Gyroscope     |           8
+ Magnetometer  |          42
+
+ `part_number`'s 7 and 8 are the last two parts for a gyroscope, we've got to reassign their
+ device_id to accelerometer. 
+
+ But maybe we want to write our code generically - what if 7 and 8 are other parts,
+ and some larger numbers were the last two.
+
+1. How do we write a WHERE condition that only captures these two numbers?
+  Or,
+2. Are we supposed to write the condition to target the current largest two numbers?
+
+I'm going to try with #1 to begin wtih.
+
+
+We've got to update the device id of the largest two numbers from 2 to 1
+Largest number. A subquery would maybe be good at figuring this out.
+We can practice our WHERE targetting with a SELECT query first.
+
+    SELECT part_number FROM parts
+      WHERE part_number in (
+        SELECT part_number FROM parts
+          ORDER BY part_number DESC LIMIT 2
+        );
+
+Ah! Well, it seems to work to some degree, but we've got to specify the largest two numbers of 
+Gyroscope. I think we can always count on the gyroscope having the same id, let's use that.
+
+    SELECT part_number FROM parts
+      WHERE part_number in (
+        SELECT part_number FROM parts
+          WHERE device_id = 2
+          ORDER BY part_number DESC LIMIT 2
+        );
+
+Great! This targets 7 and 8.
+Now, to use this with an UPDATE Statement
+
+    UPDATE parts
+      SET device_id = 1
+      WHERE part_number in (
+        SELECT part_number FROM parts
+          WHERE device_id = 2
+          ORDER BY part_number DESC LIMIT 2
+        );
+
+Success!
+Given that #1 is possible, I don't see that taking the approach of #2 and
+writing a query that works with hard coded values is going to be a great
+way of doing this.
+
+Now, is there a way of doing this without a subquery?
+
+

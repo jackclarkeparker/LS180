@@ -1,0 +1,24 @@
+Set Up Database
+
+
+
+CREATE DATABASE workshop;
+
+\c workshop
+
+CREATE TABLE devices(
+  id serial PRIMARY KEY,
+  name text NOT NULL,
+  created_at timestamp DEFAULT NOW()
+);
+
+CREATE TABLE parts(
+  id serial PRIMARY KEY,
+  part_number integer UNIQUE NOT NULL,         <<< CHECK that it's positive?
+  device_id integer REFERENCES devices(id)
+);
+
+
+
+I forgot to make device_id NOT NULL!
+It's all good though, the next question requires NULL values be inserted in the column anyway.

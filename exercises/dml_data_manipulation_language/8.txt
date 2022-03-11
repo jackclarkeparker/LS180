@@ -1,0 +1,11 @@
+Oldest Device
+
+
+
+SELECT name FROM devices
+  WHERE created_at = (
+    SELECT min(created_at) FROM devices
+  );
+
+SELECT name FROM devices
+  ORDER BY created_at LIMIT 1;
