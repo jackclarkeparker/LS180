@@ -1,0 +1,16 @@
+Write a SQL statement that will return the following result:
+
+
+
+
+SELECT categories.name AS genre,
+       count(categories.id) AS book_count,
+       STRING_AGG(books.title, ', ') AS book_titles
+  FROM categories
+  LEFT OUTER JOIN books_categories ON books_categories.category_id = categories.id
+  INNER JOIN books ON books_categories.book_id = books.id
+  GROUP BY genre ORDER BY genre;
+
+
+Launch School COUNTed by books.id instead of categories.id, which has the same outcome, but is much 
+more intuitive.

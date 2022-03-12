@@ -1,0 +1,9 @@
+Write a SQL statement that will return the following result:
+
+
+
+SELECT books.id, books.author, STRING_AGG(categories.name, ', ') AS categories
+  FROM books
+  INNER JOIN books_categories ON books_categories.book_id = books.id
+  INNER JOIN categories ON books_categories.category_id = categories.id
+  GROUP BY books.id, books.author;

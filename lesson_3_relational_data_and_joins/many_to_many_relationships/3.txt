@@ -1,0 +1,27 @@
+Write SQL statements to insert the following new books into the database. What do you need to do to ensure this data fits in the database?
+
+
+
+To insert this data into the database, we've first got to insert the Primary Keys of each of the 
+"many" tables before creating their associations - The foreign keys of associations in the join table
+must reference existing rows in each of the many tables. 
+
+Also need to adjust the schema, allowing for varchar inputs of greater length for title column - 
+adjusting to 50 chars now.
+
+
+
+ALTER TABLE books ALTER COLUMN title TYPE varchar(50);
+
+INSERT INTO books(title, author)
+  VALUES ('Sally Ride: America''s First Woman in Space', 'Lynn Sherr'),
+         ('Jane Eyre', 'Charlotte Brontë'),
+         ('Vij''s: Elegant and Inspired Indian Cuisine', 'Meeru Dhalwala and Vikram Vij');
+
+INSERT INTO categories (name)
+  VALUES ('Space Exploration'), ('Cookbook'), ('South Asia');
+
+INSERT INTO books_categories(book_id, category_id)
+  VALUES (4, 5), (4, 1), (4, 7),
+         (5, 2), (5, 4),
+         (6, 8), (6, 1), (6, 9);
