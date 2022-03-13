@@ -1,0 +1,22 @@
+Write the SQL statements needed to insert data into the new join table to represent the existing one-to-many relationships.
+
+
+
+INSERT INTO directors_films(director_id, film_id)
+VALUES (1, 1),
+       (2, 2),
+       (3, 3), (3, 7),
+       (4, 4), (4, 10),
+       (5, 5),
+       (6, 6),
+       (7, 8),
+       (8, 9);
+
+
+
+After reading up about using SELECT instead of values, did the same like this:
+
+INSERT INTO directors_films (director_id, film_id)
+  SELECT directors.id, films.id
+  FROM directors
+  INNER JOIN films ON films.director_id = directors.id;

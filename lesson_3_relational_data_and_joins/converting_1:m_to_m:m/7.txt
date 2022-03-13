@@ -1,0 +1,14 @@
+Write a SQL statement that determines how many films each director in the database has directed. 
+Sort the results by number of films (greatest first) and then name (in alphabetical order).
+
+
+
+SELECT directors.name AS director, COUNT(films.id) AS films_directed
+  FROM directors
+  LEFT OUTER JOIN directors_films ON directors_films.director_id = directors.id
+  INNER JOIN films ON directors_films.film_id = films.id
+  GROUP BY directors.name
+  ORDER BY films_directed DESC, directors.name;
+
+OKAY so the LS solution didn't join the films table, but counted the number of films directly from
+directors_films which is probably faster. Not an issue really :)

@@ -1,0 +1,21 @@
+Write the SQL statement needed to create a join table that will allow a film to have multiple directors, and directors to have multiple films. Include an id column in this table, and add foreign key constraints to the other columns.
+
+
+
+CREATE TABLE films_directors (
+  id serial PRIMARY KEY,
+  film_id integer NOT NULL REFERENCES films(id),
+  director_id integer NOT NULL REFERENCES directors(id)
+);
+
+
+
+LS uses directors_films
+-> Table names with more than one word are written in alphabetical order in SQL
+-> They didn't specify NOT NULL Foreign Key Columns, but I still will.
+
+CREATE TABLE directors_films (
+  id serial PRIMARY KEY,
+  director_id integer NOT NULL REFERENCES directors(id),
+  film_id integer NOT NULL REFERENCES films(id)
+);

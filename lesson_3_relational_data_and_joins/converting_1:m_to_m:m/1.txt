@@ -1,0 +1,4 @@
+Import this file into a database using psql.
+
+$ wget $url
+$ psql -d sql-course < $dump_file.sql
