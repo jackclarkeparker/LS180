@@ -1,0 +1,19 @@
+Deleting Rows
+
+
+SELECT * FROM services
+WHERE description = 'Bulk Email';
+
+DELETE FROM services
+WHERE id = 7;
+
+DELETE FROM customers_services WHERE service_id = 7;
+
+DELETE FROM services
+WHERE id = 7;
+
+SELECT * FROM customers
+WHERE name = 'Chen Ke-Hua';
+
+DELETE FROM customers
+WHERE id = 4;

@@ -1,0 +1,27 @@
+Hypothetically
+
+
+
+SELECT sum(price)
+  FROM services
+  INNER JOIN customers_services ON service_id = services.id
+  WHERE price > 100;
+
+SELECT sum(price)
+  FROM services
+  CROSS JOIN customers
+  WHERE price > 100;
+
+
+
+Further Exploration
+This exercise is really contrived: it just shows how hard it is to come up with a possible use case for CROSS JOIN. CROSS JOIN is generally best suited to generating test data rather than production queries.
+
+Can you think of any other situations where a CROSS JOIN might be useful?
+
+
+Say you have two teams of rugby players, each stored in their own table.
+You can use a CROSS JOIN to establish all of the matchups between individual players of
+the two teams, so to store data on how they perform in interactions on the field
+for a given match. This might help you collect data to help assess the strengths and
+weaknesses of different players.

@@ -1,0 +1,23 @@
+Get Customers With No Services
+
+Write a query to retrieve the customer data for every customer who does not currently subscribe to 
+any services.
+
+
+
+SELECT customers.* FROM customers
+  LEFT OUTER JOIN customers_services ON customers_services.customer_id = customers.id
+  WHERE customers_services.service_id IS NULL;
+
+Further Exploration
+
+Can you write a query that displays all customers with no services and all services that currently 
+don't have any customers? The output should look like this:
+
+SELECT customers.*, services.*
+  FROM customers
+  LEFT OUTER JOIN customers_services ON customers_services.customer_id = customers.id
+  FULL OUTER JOIN services ON customers_services.service_id = services.id
+  WHERE customers_services.id IS NULL;
+
+(The first OUTER JOIN can be a FULL OUTER JOIN too)

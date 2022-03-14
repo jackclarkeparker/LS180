@@ -1,0 +1,96 @@
+Services for each Customer
+
+Write a query to display a list of all customer names together with a comma-separated list of the 
+services they use. Your output should look like this:
+
+
+
+SELECT customers.name, STRING_AGG(services.description, ', ') AS services
+  FROM customers
+  LEFT OUTER JOIN customers_services ON customers_services.customer_id = customers.id
+  LEFT OUTER JOIN services ON customers_services.service_id = services.id
+  GROUP BY customers.name;
+
+
+Further Exploration
+Can you modify the above command so the output looks like this?
+
+     name      |    description
+---------------+--------------------
+ Chen Ke-Hua   | High Bandwidth
+               | Unix Hosting
+ Jim Pornot    | Dedicated Hosting
+               | Unix Hosting
+               | Bulk Email
+ Lynn Blake    | Whois Registration
+               | High Bandwidth
+               | Business Support
+               | DNS
+               | Unix Hosting
+ Nancy Monreal |
+ Pat Johnson   | Whois Registration
+               | DNS
+               | Unix Hosting
+ Scott Lakso   | DNS
+               | Dedicated Hosting
+               | Unix Hosting
+
+
+SELECT lag(customers.name, (0 - count(customers.id) OVER (PARTITION BY customers.name)))
+       OVER (PARTITION BY customers.name ORDER BY customers.name)
+       AS customer,
+       services.description
+FROM customers
+LEFT OUTER JOIN customers_services
+             ON customer_id = customers.id
+LEFT OUTER JOIN services
+             ON services.id = service_id;
+
+
+
+SELECT lag(customers.name, CASE customers.name
+                                WHEN 'Chen Ke-Hua'   THEN -1
+                                WHEN 'Jim Pornot'    THEN -2
+                                WHEN 'Lynn Blake'    THEN -4
+                                WHEN 'Nancy Monreal' THEN 0
+                                WHEN 'Pat Johnson'   THEN -2
+                                WHEN 'Scott Lakso'   THEN -2
+                           END)
+       OVER (PARTITION BY customers.name ORDER BY customers.name)
+       AS customer,
+       services.description
+FROM customers
+LEFT OUTER JOIN customers_services
+             ON customer_id = customers.id
+LEFT OUTER JOIN services
+             ON services.id = service_id;
+
+This is isn't a great outcome because it's not generalised, but it's all that I
+came to after looking at it for a doro or so.
+
+Window Functions
+Partitions
+
+I was trying to find a way of subtracting from 0, giving a negative offset that would leave
+all but the first occurance of each name sitting outside the partition, and
+being assigned to NULL by `lag()`.
+
+I've looked through some other solutions, this seems to be nice:
+
+SELECT CASE lag(customers.name) OVER (ORDER BY customers.name)
+         WHEN customers.name THEN NULL
+         ELSE customers.name
+       END AS name,
+       services.description
+  FROM customers
+  LEFT OUTER JOIN customers_services ON customer_id = customers.id
+  LEFT OUTER JOIN services ON services.id = service_id;
+
+I'm not super clear on the OVER clause.
+
+  -> OKAY, so the OVER clause provides a Window Definition, and this is where we can
+     decide what the rows will be PARTITIONed BY. Because this isn't specified, all
+     the query rows are treated as a single partition, so lag just OFFSETs the entries
+     by a single row, which is what allows for the CASE statement to set the entry to
+     customers.name whenever the result of this offsetting isn't already customers.name.
+
