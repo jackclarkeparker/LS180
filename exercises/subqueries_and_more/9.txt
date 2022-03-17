@@ -1,0 +1,144 @@
+Comparing SQL Statements
+
+
+
+EXPLAIN ANALYZE SELECT MAX(bid_counts.count) FROM
+  (SELECT COUNT(bidder_id) FROM bids GROUP BY bidder_id) AS bid_counts;
+
+                                              QUERY PLAN                                                 
+-----------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=1.03..1.04 rows=1 width=8) (actual time=0.488..0.489 rows=1 loops=1)
+   ->  HashAggregate  (cost=1.00..1.01 rows=1 width=12) (actual time=0.477..0.483 rows=6 loops=1)
+         Group Key: bids.bidder_id
+         ->  Seq Scan on bids  (cost=0.00..1.00 rows=1 width=4) (actual time=0.431..0.449 rows=26 loops=1)
+ Planning time: 2.758 ms
+ Execution time: 0.547 ms
+(6 rows)
+
+
+
+EXPLAIN ANALYZE SELECT COUNT(bidder_id) AS max_bid FROM bids
+  GROUP BY bidder_id
+  ORDER BY max_bid DESC
+  LIMIT 1;
+                                                  QUERY PLAN                                                    
+-----------------------------------------------------------------------------------------------------------------
+ Limit  (cost=1.02..1.03 rows=1 width=12) (actual time=0.073..0.075 rows=1 loops=1)
+   ->  Sort  (cost=1.02..1.03 rows=1 width=12) (actual time=0.071..0.071 rows=1 loops=1)
+         Sort Key: (count(bidder_id)) DESC
+         Sort Method: top-N heapsort  Memory: 25kB
+         ->  HashAggregate  (cost=1.00..1.01 rows=1 width=12) (actual time=0.050..0.054 rows=6 loops=1)
+               Group Key: bidder_id
+               ->  Seq Scan on bids  (cost=0.00..1.00 rows=1 width=4) (actual time=0.006..0.024 rows=26 loops=1)
+ Planning time: 0.087 ms
+ Execution time: 0.111 ms
+(9 rows)
+
+
+
+- It turns out that running the statement without the subquery is WAY faster.
+  - Planning time is only .087 of a ms for the regular query, compared to 2.758 ms for the subquery (more than 30 times
+    slower)
+  - Execution time is only .111 ms for reg query, .547 for reg query (almost 5 times slower)
+  - Total time to run regular query == 0.198 ms vs. subquery == 3.305 (more than 15 times faster to run the regular 
+    query)
+  - The "costs" that PostgreSQL has estimated are practically equal. This tells us that the query plan doesn't always
+    reflect the realities of what it will take to run a query.
+
+
+
+LS solution indicates that the subquery is a lot faster than the reg query.
+Their numbers certainly show this.
+
+I just ran my EXPLAIN ANALYZE statements again, and got more or less identical values for the
+two variants of statement.
+
+I'll read through what they've written for the solution now.
+
+It seems
+
+
+
+Further Exploration
+
+We mentioned earlier that using a scalar subquery was faster than using an equivalent JOIN clause.
+Determining that JOIN statement was part of the "Further Exploration" for that exercise.
+For this "Further Exploration", compare the times and costs of those two statements.
+The SQL statement that uses a scalar subquery is listed below.
+
+
+
+EXPLAIN ANALYZE SELECT name,
+  (SELECT COUNT(item_id) FROM bids WHERE item_id = items.id)
+FROM items;
+
+                                                 QUERY PLAN                                                 
+------------------------------------------------------------------------------------------------------------
+ Seq Scan on items  (cost=0.00..909.80 rows=880 width=40) (actual time=0.057..0.138 rows=6 loops=1)
+   SubPlan 1
+     ->  Aggregate  (cost=1.00..1.01 rows=1 width=8) (actual time=0.014..0.015 rows=1 loops=6)
+           ->  Seq Scan on bids  (cost=0.00..1.00 rows=1 width=4) (actual time=0.003..0.007 rows=4 loops=6)
+                 Filter: (item_id = items.id)
+                 Rows Removed by Filter: 22
+ Planning time: 0.083 ms
+ Execution time: 0.173 ms
+(8 rows)
+
+
+
+EXPLAIN ANALYZE SELECT items.name, count(bids.item_id) FROM items
+  LEFT OUTER JOIN bids
+    ON bids.item_id = items.id
+  GROUP BY items.id
+  ORDER BY items.id;
+
+                                                            QUERY PLAN    
+----------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=1.16..77.78 rows=880 width=44) (actual time=0.076..0.148 rows=6 loops=1)
+   Group Key: items.id
+   ->  Merge Left Join  (cost=1.16..64.58 rows=880 width=40) (actual time=0.059..0.122 rows=27 loops=1)
+         Merge Cond: (items.id = bids.item_id)
+         ->  Index Scan using items_pkey on items  (cost=0.15..61.35 rows=880 width=36) (actual time=0.007..0.013 rows=6 loops=1)
+         ->  Sort  (cost=1.01..1.01 rows=1 width=4) (actual time=0.047..0.063 rows=26 loops=1)
+               Sort Key: bids.item_id
+               Sort Method: quicksort  Memory: 26kB
+               ->  Seq Scan on bids  (cost=0.00..1.00 rows=1 width=4) (actual time=0.006..0.023 rows=26 loops=1)
+ Planning time: 0.133 ms
+ Execution time: 0.199 ms
+(11 rows)
+
+
+LEFT OUTER JOIN
+  - Total Time  0.332
+      - Planning  0.133
+      - Execution 0.199
+  - Total costs 77.78
+
+Scalar Query
+  - Total Time  0.256
+      - Planning  0.083
+      - Execution 0.173
+  - Total costs 909.8
+
+---> SOOO, The LEFT OUTER JOIN takes about 33% longer than the scalar query, but only costs a twelfth of the resources,
+     which could well be an important factor to consider.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

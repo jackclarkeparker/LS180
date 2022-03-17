@@ -1,0 +1,104 @@
+EXPLAIN
+
+
+
+EXPLAIN SELECT name FROM bidders
+  WHERE EXISTS (SELECT 1 FROM bids WHERE bids.bidder_id = bidders.id);
+
+                                    QUERY PLAN                                     
+-----------------------------------------------------------------------------------
+ Nested Loop  (cost=1.16..9.19 rows=635 width=32)
+   ->  HashAggregate  (cost=1.00..1.01 rows=1 width=4)
+         Group Key: bids.bidder_id
+         ->  Seq Scan on bids  (cost=0.00..1.00 rows=1 width=4)
+   ->  Index Scan using bidders_pkey on bidders  (cost=0.15..8.17 rows=1 width=36)
+         Index Cond: (id = bids.bidder_id)
+(6 rows)
+
+
+- 6 rows estimated to be returned
+
+- One of the key values to look for when comparing different queries is the estimated
+  total_cost for the top-most node. Here that is 9.19
+  - This seems to be the sum of the estimated total_cost for the nodes that are one
+    indentation in from it:
+    - the HashAggregate has a total of 1.01
+    - the Index Scan has a total of 8.17
+    - 8.17 + 1.01 == 9.18 (~ 9.19, perhaps if you include smaller fractionals not being displayed
+                           here)
+
+- The Index Scan appears to be costing the most.
+
+- The number of nodes is 4. There is:
+  - A Nested Loop
+  - A HashAggregate
+  - A Seq Scan
+  - An Index Scan
+
+- Certain nodes appear to be part of other nodes:
+  -> Nested Loop
+   \-> HashAggregate
+   |\-> Seq Scan
+   \-> Index Scan
+
+- The HashAggregate and Index Scan nodes both feature an additional line of information
+  
+  - HashAggregate has a `Group Key:`, which is `bids.bidder_id`
+    - I wonder if this is connected to the WHERE clause of our subquery:
+        `WHERE bids.bidder_id = bidders.id`
+      -> This is the only place that `bids.bidder_id` is cited.
+    - HashAggregate also includes a Seq Scan
+      - I guess this means to run the HashAggregate node, a Sequential Scan but me run
+        - This is different from an Index Scan. Why can't we run an Index Scan here?
+          Isn't bids.bidder_id indexed?
+
+  - Index Scan has an `Index Cond:`, which is `id = bids.bidder_id`
+    - Indexes are used for faster look up. Which indexes do we have here?
+      - bids.bidder_id has an index
+      - bidder.id has an index
+    - I guess this index condition is the connected to the `WHERE` clause of our subquery:
+        `WHERE bids.bidder_id = bidders.id`
+
+
+
+
+
+EXPLAIN ANALYZE SELECT name FROM bidders
+  WHERE EXISTS (SELECT 1 FROM bids WHERE bids.bidder_id = bidders.id);
+
+                                                         QUERY PLAN                                                          
+-----------------------------------------------------------------------------------------------------------------------------
+ Nested Loop  (cost=1.16..9.19 rows=635 width=32) (actual time=0.069..0.100 rows=6 loops=1)
+   ->  HashAggregate  (cost=1.00..1.01 rows=1 width=4) (actual time=0.055..0.062 rows=6 loops=1)
+         Group Key: bids.bidder_id
+         ->  Seq Scan on bids  (cost=0.00..1.00 rows=1 width=4) (actual time=0.011..0.028 rows=26 loops=1)
+   ->  Index Scan using bidders_pkey on bidders  (cost=0.15..8.17 rows=1 width=36) (actual time=0.003..0.003 rows=1 loops=6)
+         Index Cond: (id = bids.bidder_id)
+ Planning time: 0.158 ms
+ Execution time: 0.151 ms
+(8 rows)
+
+
+- 8 rows actually returned
+
+- The Index Scan which had a much higher estimated cost than the HashAggregate actually ended up taking only
+  a 20th of the amount of time to execute.
+
+- Additional information displayed:
+  - Each node is given actual time spent for startup, total time, number of rows returned, as well as `loops`.
+    - I'm not sure exactly what is indicated by loops. Is it the number of times that the node had to be run to perform the query?
+  - At the end of the node tree we have a total (for the whole query) `Planning time` and `Execution time`
+  - Actual number of rows returned
+
+
+
+
+
+
+
+
+
+
+
+
+

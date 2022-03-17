@@ -1,0 +1,12 @@
+Query From a Virtual Table
+
+
+
+SELECT max(count) FROM (
+    SELECT count(bidder_id) FROM bids
+    GROUP BY bidder_id
+  ) AS subquery;
+
+
+LS called their subquery bid_counts, and referenced bid_counts when passing
+the arguments into max() like so - bid_counts.count

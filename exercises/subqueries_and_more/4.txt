@@ -1,0 +1,27 @@
+Conditional Subqueries: EXISTS
+
+
+
+SELECT bidders.name FROM bidders
+  WHERE EXISTS (
+    SELECT bidder_id FROM bids
+    WHERE bidder_id = bidders.id
+  );
+
+
+LS solution pointed out that what is returned by the subquery select doesn't
+matter, so long as it returns rows when it needs to, and doesn't return rows
+when it shouldn't - They did `SELECT 1 FROM bids...`
+
+
+
+Further Exploration
+
+More often than not, we can get an equivalent result by using a JOIN clause, instead of a subquery. 
+Can you figure out a SELECT query that uses a JOIN clause that returns the same output as our 
+solution above?
+
+
+
+SELECT DISTINCT bidders.name FROM bidders
+  INNER JOIN bids ON bids.bidder_id = bidders.id;

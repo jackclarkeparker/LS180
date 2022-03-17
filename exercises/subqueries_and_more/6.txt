@@ -1,0 +1,24 @@
+Scalar Subqueries
+
+
+SELECT name, (SELECT count(bids.item_id) FROM bids where items.id = bids.item_id)
+  FROM items;
+
+
+
+Further Exploration
+If we wanted to get an equivalent result, without using a subquery, then we would have to use a LEFT 
+OUTER JOIN. Can you come up with the equivalent query that uses a JOIN clause?
+
+
+
+SELECT name, count(item_id) FROM items
+  LEFT OUTER JOIN bids
+    ON bids.item_id = items.id
+  GROUP BY name;
+
+
+Reading other solutions, I see that to get the same ordering, we've also got to provide an
+ORDER BY items.id clause, which necessitates that the GROUP BY clause groups by the items.id
+as well.
+
